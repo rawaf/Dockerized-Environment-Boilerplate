@@ -33,10 +33,11 @@ services:
     depends_on:
       - nginx-proxy
     volumes:
-      - /Dockerized-Environment-Boilerplate/Volume/Nginx-Proxy-SSL/certs:/etc/nginx/certs:rw
       - /var/run/docker.sock:/var/run/docker.sock:ro
-    volumes_from:
-      - nginx-proxy
+      - /Dockerized-Environment-Boilerplate/Volume/Nginx-Proxy-SSL/certs:/etc/nginx/certs:rw
+      - /Dockerized-Environment-Boilerplate/Volume/Nginx-Proxy-SSL/conf.d:/etc/nginx/conf.d
+      - /Dockerized-Environment-Boilerplate/Volume/Nginx-Proxy-SSL/vhost.d:/etc/nginx/vhost.d
+      - /Dockerized-Environment-Boilerplate/Volume/Nginx-Proxy-SSL/html:/usr/share/nginx/html
     networks:
       - back_tier
   certs:
