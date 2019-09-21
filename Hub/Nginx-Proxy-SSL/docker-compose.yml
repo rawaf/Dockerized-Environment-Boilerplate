@@ -1,10 +1,14 @@
 version: "3"
 networks:
   back_tier:
+    driver: bridge
     ipam:
       config:
         - subnet: 192.168.0.0/24
   front_tier:
+    driver: bridge
+  cert_tier:
+    driver: bridge
 services:
   nginx-proxy:
     image: jwilder/nginx-proxy
@@ -45,4 +49,4 @@ services:
       - LETSENCRYPT_HOST=wamvo.com,www.wamvo.com,mail.wamvo.com,phpmyadmin.wamvo.com,project-realestate-eg.com,www.project-realestate-eg.com,mail.project-realestate-eg.com,phpmyadmin.project-realestate-eg.com
       - LETSENCRYPT_EMAIL=rawaf@wamvo.com
     networks:
-      - back_tier
+      - cert_tier
