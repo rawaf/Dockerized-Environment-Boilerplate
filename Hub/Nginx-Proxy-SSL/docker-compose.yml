@@ -1,12 +1,10 @@
 version: "3"
 networks:
   back_tier:
-    name: back_tier
     ipam:
       config:
         - subnet: 192.168.0.0/24
   front_tier:
-    name: front_tier
 services:
   nginx-proxy:
     image: jwilder/nginx-proxy
