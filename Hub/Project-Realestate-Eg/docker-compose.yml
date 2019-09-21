@@ -1,0 +1,60 @@
+version: '3'
+networks:
+  back_tier:
+    external:
+      name: back_tier
+services:
+  php-fpm:
+    build:
+      context: /Dockerized-Environment-Boilerplate/Hub/Project-Realestate-Eg/PHP-FPM
+      container_name: php-project-realestate-eg
+    volumes:
+      - /Dockerized-Environment-Boilerplate/Volume/Project-Realestate-Eg/www:/var/www/html
+    networks:
+      back_tier:
+        ipv4_address: 192.168.0.201
+  nginx:
+    image: nginx
+    container_name: nginx-project-realestate-eg
+    depends_on:
+      - php-fpm
+    volumes:
+      - /Dockerized-Environment-Boilerplate/Volume/Project-Realestate-Eg/conf.d:/etc/nginx/conf.d
+      - /Dockerized-Environment-Boilerplate/Volume/Project-Realestate-Eg/www:/var/www/html
+      - /Dockerized-Environment-Boilerplate/Volume/Project-Realestate-Eg/log/nginx:/var/log/nginx
+    ports:
+      - "80:80"
+    networks:
+      - back_tier
+      - front_tier
+    links:
+      - php-fpm
+  mariadb:
+    image: mariadb
+    container_name: mariadb-project-realestate-eg
+    volumes:
+      - /Dockerized-Environment-Boilerplate/Volume/Project-Realestate-Eg/mariadb:/var/lib/mysql
+    ports:
+      - "3306:3306"
+    environment:
+      - MYSQL_ROOT_PASSWORD=SUPERSECRETPASSWORD
+      - MYSQL_RANDOM_ROOT_PASSWORD=yes
+      - MYSQL_USER=rawaf
+      - MYSQL_PASSWORD=rawaf
+    networks:
+      - back-tier
+    restart: always
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    container_name: phpmyadmin-project-realestate-eg
+    volumes:
+      - /Dockerized-Environment-Boilerplate/Volume/Project-Realestate-Eg/phpmyadmin
+    environment:
+      - "PMA_HOST=mariadb-project-realestate-eg"
+      - "PMA_PORT=3306"
+      - "PMA_ABSOLUTE_URI=https://phpmyadmin.project-realestate-eg.com/"
+    ports:
+      - 80:80
+    links:
+      - mariadb
+      restart: always

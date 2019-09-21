@@ -1,0 +1,50 @@
+version: "3"
+networks:
+  back_tier:
+    name: back_tier
+    ipam:
+      config:
+        - subnet: 192.168.0.0/24
+  front_tier:
+    name: front_tier
+services:
+  nginx-proxy:
+    image: jwilder/nginx-proxy
+    container_name: nginx-proxy
+    ports:
+      - 80:80
+      - 443:443
+    volumes:
+      - /Dockerized-Environment-Boilerplate/Volume/Nginx-Proxy-SSL/conf.d:/etc/nginx/conf.d
+      - /Dockerized-Environment-Boilerplate/Volume/Nginx-Proxy-SSL/vhost.d:/etc/nginx/vhost.d
+      - /Dockerized-Environment-Boilerplate/Volume/Nginx-Proxy-SSL/html:/usr/share/nginx/html
+      - /Dockerized-Environment-Boilerplate/Volume/Nginx-Proxy-SSL/certs:/etc/nginx/certs:ro
+      - /var/run/docker.sock:/tmp/docker.sock:ro
+    networks:
+      - back_tier
+    restart: always
+    labels:
+      - maintainer="Ahmed Rawaf <ahmed.rawaf.elhawary@gmail.com>"
+  letsencrypt:
+    image: jrcs/letsencrypt-nginx-proxy-companion
+    container_name: encrypt
+    depends_on:
+      - nginx-proxy
+    volumes:
+      - /Dockerized-Environment-Boilerplate/Volume/Nginx-Proxy-SSL/certs:/etc/nginx/certs:rw
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+    volumes_from:
+      - nginx-proxy
+    networks:
+      - back_tier
+  certs:
+    image: tutum/apache-php
+    container_name: certs
+    depends_on:
+      - letsencrypt
+    environment:
+      - VIRTUAL_HOST=wamvo.com,www.wamvo.com,mail.wamvo.com,phpmyadmin.wamvo.com,project-realestate-eg.com,www.project-realestate-eg.com,mail.project-realestate-eg.com,phpmyadmin.project-realestate-eg.com
+      - LETSENCRYPT_HOST=wamvo.com,www.wamvo.com,mail.wamvo.com,phpmyadmin.wamvo.com,project-realestate-eg.com,www.project-realestate-eg.com,mail.project-realestate-eg.com,phpmyadmin.project-realestate-eg.com
+      - LETSENCRYPT_EMAIL=rawaf@wamvo.com
+    networks:
+      - back_tier
