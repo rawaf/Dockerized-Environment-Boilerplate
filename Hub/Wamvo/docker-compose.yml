@@ -1,4 +1,11 @@
-version: '3'
+version: '3.7'
+networks:
+  back_tier:
+    external: true
+    name: nginx-proxy-ssl_back_tier
+  front_tier:
+    external: true
+    name: nginx-proxy-ssl_front_tier
 services:
   php-fpm:
     build:

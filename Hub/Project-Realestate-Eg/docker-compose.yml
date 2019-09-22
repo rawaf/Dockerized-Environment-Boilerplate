@@ -15,6 +15,7 @@ services:
       - /Dockerized-Environment-Boilerplate/Volume/Project-Realestate-Eg/www:/var/www/html
     networks:
       back_tier:
+        ipv4_address: 192.168.0.201
   nginx:
     image: nginx
     container_name: nginx-project-realestate-eg
@@ -28,7 +29,9 @@ services:
       - "80:80"
     networks:
       back_tier:
+        external: true
       front_tier:
+        external: true
     links:
       - php-fpm
   mariadb:
@@ -45,6 +48,7 @@ services:
       - MYSQL_PASSWORD=rawaf
     networks:
       back_tier:
+        external: true
     restart: always
   phpmyadmin:
     image: phpmyadmin/phpmyadmin
@@ -61,4 +65,5 @@ services:
       - mariadb
     networks:
       back_tier:
+        external: true
     restart: always
