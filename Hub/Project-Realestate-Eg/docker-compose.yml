@@ -29,9 +29,7 @@ services:
       - "80:80"
     networks:
       back_tier:
-        external: true
       front_tier:
-        external: true
     links:
       - php-fpm
   mariadb:
@@ -48,7 +46,6 @@ services:
       - MYSQL_PASSWORD=rawaf
     networks:
       back_tier:
-        external: true
     restart: always
   phpmyadmin:
     image: phpmyadmin/phpmyadmin
@@ -65,5 +62,4 @@ services:
       - mariadb
     networks:
       back_tier:
-        external: true
     restart: always
