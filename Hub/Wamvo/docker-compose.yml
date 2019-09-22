@@ -1,11 +1,4 @@
 version: '3.7'
-networks:
-  back_tier:
-    external:
-      name: back_tier
-  front_tier:
-    external:
-      name: front_tier
 services:
   php-fpm:
     build:
@@ -28,8 +21,12 @@ services:
     ports:
       - "80:80"
     networks:
-      - back_tier
-      - front_tier
+      back_tier:
+        external:
+          name: back_tier
+      front_tier:
+        external:
+          name: front_tier
     links:
       - php-fpm
   mariadb:
@@ -45,7 +42,9 @@ services:
       - MYSQL_USER=rawaf
       - MYSQL_PASSWORD=rawaf
     networks:
-      - back-tier
+      back_tier:
+        external:
+          name: back_tier
     restart: always
   phpmyadmin:
     image: phpmyadmin/phpmyadmin
@@ -61,5 +60,7 @@ services:
     links:
       - mariadb
     networks:
-      - back-tier
+      back_tier:
+        external:
+          name: back_tier
     restart: always
