@@ -3,6 +3,9 @@ networks:
   back_tier:
     external:
       name: back_tier
+  front_tier:
+    external:
+      name: front_tier
 services:
   php-fpm:
     build:
