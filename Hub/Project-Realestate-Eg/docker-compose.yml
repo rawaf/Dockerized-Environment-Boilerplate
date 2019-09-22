@@ -8,7 +8,6 @@ services:
     build:
       context: /Dockerized-Environment-Boilerplate/Hub/Project-Realestate-Eg/PHP-FPM
       image: php-project-realestate-eg
-      container_name: php-project-realestate-eg
     volumes:
       - /Dockerized-Environment-Boilerplate/Volume/Project-Realestate-Eg/www:/var/www/html
     networks:
