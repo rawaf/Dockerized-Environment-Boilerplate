@@ -24,6 +24,7 @@ services:
       - /var/run/docker.sock:/tmp/docker.sock:ro
     networks:
       - back_tier
+      - front_tier
     restart: always
     labels:
       - com.github.jrcs.letsencrypt_nginx_proxy_companion.nginx_proxy
