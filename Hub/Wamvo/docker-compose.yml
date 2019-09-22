@@ -26,7 +26,7 @@ services:
       - /Dockerized-Environment-Boilerplate/Volume/Wamvo/www:/var/www/html
       - /Dockerized-Environment-Boilerplate/Volume/Wamvo/log/nginx:/var/log/nginx
     ports:
-      - "4003:80"
+      - "4003:4003"
     networks:
       back_tier:
       front_tier:
@@ -57,7 +57,7 @@ services:
       - "PMA_PORT=3306"
       - "PMA_ABSOLUTE_URI=https://phpmyadmin.wamvo.com/"
     ports:
-      - 4004:80
+      - 4004:4004
     links:
       - mariadb
     networks:
