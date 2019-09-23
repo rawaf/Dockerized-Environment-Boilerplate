@@ -2,10 +2,8 @@ version: '3.7'
 networks:
   back_tier:
     external: true
-    name: nginx-proxy-ssl_back_tier
   front_tier:
     external: true
-    name: nginx-proxy-ssl_front_tier
 services:
   php-fpm:
     build:
@@ -15,7 +13,6 @@ services:
       - /Dockerized-Environment-Boilerplate/Volume/Wamvo/www:/var/www/html
     networks:
       back_tier:
-        ipv4_address: 192.168.0.200
   nginx:
     image: nginx
     container_name: nginx-wamvo
@@ -25,25 +22,30 @@ services:
       - /Dockerized-Environment-Boilerplate/Volume/Wamvo/conf.d:/etc/nginx/conf.d
       - /Dockerized-Environment-Boilerplate/Volume/Wamvo/www:/var/www/html
       - /Dockerized-Environment-Boilerplate/Volume/Wamvo/log/nginx:/var/log/nginx
-    ports:
-      - "4003:4003"
+    expose:
+      - 80
     networks:
       back_tier:
       front_tier:
+    environment:
+      VIRTUAL_HOST: wamvo.com,www.wamvo.com,mail.wamvo.com,phpmyadmin.wamvo.com
+      LETSENCRYPT_HOST: wamvo.com,www.wamvo.com,mail.wamvo.com,phpmyadmin.wamvo.com
+      LETSENCRYPT_EMAIL: contact@wamvo.com
     links:
       - php-fpm
+    working_dir: /var/www/html
+    restart: always
   mariadb:
     image: mariadb
     container_name: mariadb-wamvo
     volumes:
       - /Dockerized-Environment-Boilerplate/Volume/Wamvo/mariadb:/var/lib/mysql
     ports:
-      - "3306:3306"
+      - 3306:3306
     environment:
-      - MYSQL_ROOT_PASSWORD=SUPERSECRETPASSWORD
-      - MYSQL_RANDOM_ROOT_PASSWORD=yes
-      - MYSQL_USER=rawaf
-      - MYSQL_PASSWORD=rawaf
+      MYSQL_ROOT_PASSWORD: rawaf
+      MYSQL_USER: rawaf
+      MYSQL_PASSWORD: rawaf
     networks:
       back_tier:
     restart: always
@@ -53,9 +55,10 @@ services:
     volumes:
       - /Dockerized-Environment-Boilerplate/Volume/Wamvo/phpmyadmin
     environment:
-      - "PMA_HOST=mariadb-wamvo"
-      - "PMA_PORT=3306"
-      - "PMA_ABSOLUTE_URI=https://phpmyadmin.wamvo.com/"
+      VIRTUAL_HOST: phpmyadmin.wamvo.com
+      PMA_HOST: mariadb-wamvo
+      PMA_PORT: 3306
+      PMA_ABSOLUTE_URI: https://phpmyadmin.wamvo.com/
     ports:
       - 4004:4004
     links:

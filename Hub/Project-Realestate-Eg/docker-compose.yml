@@ -2,10 +2,8 @@ version: '3.7'
 networks:
   back_tier:
     external: true
-    name: nginx-proxy-ssl_back_tier
   front_tier:
     external: true
-    name: nginx-proxy-ssl_front_tier
 services:
   php-fpm:
     build:
@@ -15,7 +13,6 @@ services:
       - /Dockerized-Environment-Boilerplate/Volume/Project-Realestate-Eg/www:/var/www/html
     networks:
       back_tier:
-        ipv4_address: 192.168.0.201
   nginx:
     image: nginx
     container_name: nginx-project-realestate-eg
@@ -25,25 +22,30 @@ services:
       - /Dockerized-Environment-Boilerplate/Volume/Project-Realestate-Eg/conf.d:/etc/nginx/conf.d
       - /Dockerized-Environment-Boilerplate/Volume/Project-Realestate-Eg/www:/var/www/html
       - /Dockerized-Environment-Boilerplate/Volume/Project-Realestate-Eg/log/nginx:/var/log/nginx
-    ports:
-      - "4001:4001"
+    expose:
+      - 80
     networks:
       back_tier:
       front_tier:
+    environment:
+        VIRTUAL_HOST: project-realestate-eg.com,www.project-realestate-eg.com,mail.project-realestate-eg.com,phpmyadmin.project-realestate-eg.com
+        LETSENCRYPT_HOST: project-realestate-eg.com,www.project-realestate-eg.com,mail.project-realestate-eg.com,phpmyadmin.project-realestate-eg.com
+        LETSENCRYPT_EMAIL: contact@project-realestate-eg.com
     links:
       - php-fpm
+    working_dir: /var/www/html
+    restart: always
   mariadb:
     image: mariadb
     container_name: mariadb-project-realestate-eg
     volumes:
       - /Dockerized-Environment-Boilerplate/Volume/Project-Realestate-Eg/mariadb:/var/lib/mysql
     ports:
-      - "3306:3306"
+      - 3306:3306
     environment:
-      - MYSQL_ROOT_PASSWORD=SUPERSECRETPASSWORD
-      - MYSQL_RANDOM_ROOT_PASSWORD=yes
-      - MYSQL_USER=rawaf
-      - MYSQL_PASSWORD=rawaf
+        MYSQL_ROOT_PASSWORD: rawaf
+        MYSQL_USER: rawaf
+        MYSQL_PASSWORD: rawaf
     networks:
       back_tier:
     restart: always
@@ -53,9 +55,10 @@ services:
     volumes:
       - /Dockerized-Environment-Boilerplate/Volume/Project-Realestate-Eg/phpmyadmin
     environment:
-      - "PMA_HOST=mariadb-project-realestate-eg"
-      - "PMA_PORT=3306"
-      - "PMA_ABSOLUTE_URI=https://phpmyadmin.project-realestate-eg.com/"
+      VIRTUAL_HOST: phpmyadmin.project-realestate-eg.com
+      PMA_HOST: mariadb-project-realestate-eg
+      PMA_PORT: 3306
+      PMA_ABSOLUTE_URI: https://phpmyadmin.project-realestate-eg.com/
     ports:
       - 4002:4002
     links:

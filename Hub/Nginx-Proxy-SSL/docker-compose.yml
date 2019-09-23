@@ -1,13 +1,10 @@
-version: "3"
+version: "3.7"
 networks:
   back_tier:
+    name: back_tier
     driver: bridge
-    ipam:
-      config:
-        - subnet: 192.168.0.0/24
   front_tier:
-    driver: bridge
-  cert_tier:
+    name: front_tier
     driver: bridge
 services:
   nginx-proxy:
@@ -41,14 +38,4 @@ services:
       - /Dockerized-Environment-Boilerplate/Volume/Nginx-Proxy-SSL/html:/usr/share/nginx/html
     networks:
       - back_tier
-  certs:
-    image: tutum/apache-php
-    container_name: certs
-    depends_on:
-      - letsencrypt
-    environment:
-      - VIRTUAL_HOST=wamvo.com,www.wamvo.com,mail.wamvo.com,phpmyadmin.wamvo.com,project-realestate-eg.com,www.project-realestate-eg.com,mail.project-realestate-eg.com,phpmyadmin.project-realestate-eg.com
-      - LETSENCRYPT_HOST=wamvo.com,www.wamvo.com,mail.wamvo.com,phpmyadmin.wamvo.com,project-realestate-eg.com,www.project-realestate-eg.com,mail.project-realestate-eg.com,phpmyadmin.project-realestate-eg.com
-      - LETSENCRYPT_EMAIL=rawaf@wamvo.com
-    networks:
-      - cert_tier
+    restart: always
