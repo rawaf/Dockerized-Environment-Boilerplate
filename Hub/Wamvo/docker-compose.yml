@@ -22,11 +22,9 @@ services:
       - /Dockerized-Environment-Boilerplate/Volume/Wamvo/conf.d:/etc/nginx/conf.d
       - /Dockerized-Environment-Boilerplate/Volume/Wamvo/www:/var/www/html
       - /Dockerized-Environment-Boilerplate/Volume/Wamvo/log/nginx:/var/log/nginx
-    ports:
-      - 80
-      - 443
     expose:
       - 80
+      - 443
     networks:
       back_tier:
       front_tier:
