@@ -44,7 +44,7 @@ services:
     restart: always
   phpmyadmin:
     image: phpmyadmin/phpmyadmin
-    container_name: phpmyadmin
+    container_name: phpmyadmin-project-realestate-eg
     volumes:
       - /Dockerized-Environment-Boilerplate/Volume/phpmyadmin
     environment:
@@ -52,7 +52,6 @@ services:
       PMA_DB_ENGINE: mariadb
       PMA_HOST: mariadb
       PMA_PORT: 3306
-      PMA_ABSOLUTE_URI: https://phpmyadmin.project-realestate-eg.com
     ports:
       - 4002:4002
     links:
