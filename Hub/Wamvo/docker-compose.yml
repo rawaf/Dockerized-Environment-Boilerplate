@@ -14,7 +14,7 @@ services:
     networks:
       back_tier:
     external_links:
-      - mariadb:mysqlip
+      - mariadb
   nginx:
     image: nginx
     container_name: nginx-wamvo
@@ -39,25 +39,25 @@ services:
     links:
       - php-fpm
     external_links:
-      - mariadb:mysqlip
+      - mariadb
     working_dir: /var/www/html
     restart: always
   phpmyadmin:
     image: phpmyadmin/phpmyadmin
     container_name: phpmyadmin-wamvo
     volumes:
-      - /Dockerized-Environment-Boilerplate/Volume/phpmyadmin
+      - /Dockerized-Environment-Boilerplate/Volume/Wamvo/phpmyadmin/phpmyadmin:/etc/phpmyadmin
+    networks:
+      back_tier:
+    ports:
+      - 8002:80
     environment:
       VIRTUAL_HOST: phpmyadmin.wamvo.com
+      VIRTUAL_PORT: 8002
       PMA_DB_ENGINE: mariadb
       PMA_HOST: mariadb
-      PMA_PORT: 3306
-    ports:
-      - 4001:4001
     links:
       - php-fpm
     external_links:
-      - mariadb:db
-    networks:
-      back_tier:
+      - mariadb
     restart: always

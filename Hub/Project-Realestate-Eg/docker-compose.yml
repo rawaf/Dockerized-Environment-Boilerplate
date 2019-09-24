@@ -14,7 +14,7 @@ services:
     networks:
       back_tier:
     external_links:
-      - mariadb:mysqlip
+      - mariadb
   nginx:
     image: nginx
     container_name: nginx-project-realestate-eg
@@ -39,25 +39,25 @@ services:
     links:
       - php-fpm
     external_links:
-      - mariadb:mysqlip
+      - mariadb
     working_dir: /var/www/html
     restart: always
   phpmyadmin:
     image: phpmyadmin/phpmyadmin
     container_name: phpmyadmin-project-realestate-eg
     volumes:
-      - /Dockerized-Environment-Boilerplate/Volume/phpmyadmin
+      - /Dockerized-Environment-Boilerplate/Volume/Project-Realestate-Eg/phpmyadmin/phpmyadmin:/etc/phpmyadmin
+    networks:
+      back_tier:
+    ports:
+      - 8003:80
     environment:
       VIRTUAL_HOST: phpmyadmin.project-realestate-eg.com
+      VIRTUAL_PORT: 8003
       PMA_DB_ENGINE: mariadb
       PMA_HOST: mariadb
-      PMA_PORT: 3306
-    ports:
-      - 4002:4002
     links:
       - php-fpm
     external_links:
-      - mariadb:db
-    networks:
-      back_tier:
+      - mariadb
     restart: always
