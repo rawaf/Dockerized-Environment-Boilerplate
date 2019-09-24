@@ -32,10 +32,25 @@ services:
       - nginx-proxy
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock:ro
+      - /var/run/docker.sock:/tmp/docker.sock:ro
       - /Dockerized-Environment-Boilerplate/Volume/Nginx-Proxy-SSL/certs:/etc/nginx/certs:rw
       - /Dockerized-Environment-Boilerplate/Volume/Nginx-Proxy-SSL/conf.d:/etc/nginx/conf.d
       - /Dockerized-Environment-Boilerplate/Volume/Nginx-Proxy-SSL/vhost.d:/etc/nginx/vhost.d
       - /Dockerized-Environment-Boilerplate/Volume/Nginx-Proxy-SSL/html:/usr/share/nginx/html
     networks:
       - back_tier
+    restart: always
+  mariadb:
+    image: mariadb
+    container_name: mariadb
+    volumes:
+      - /Dockerized-Environment-Boilerplate/Volume/mariadb:/var/lib/mysql
+    ports:
+      - 3306:3306
+    environment:
+      MYSQL_ROOT_PASSWORD: rawaf
+      MYSQL_USER: rawaf
+      MYSQL_PASSWORD: rawaf
+    networks:
+      back_tier:
     restart: always

@@ -35,30 +35,17 @@ services:
       - php-fpm
     working_dir: /var/www/html
     restart: always
-  mariadb:
-    image: mariadb
-    container_name: mariadb-project-realestate-eg
-    volumes:
-      - /Dockerized-Environment-Boilerplate/Volume/Project-Realestate-Eg/mariadb:/var/lib/mysql
-    ports:
-      - 3306:3306
-    environment:
-        MYSQL_ROOT_PASSWORD: rawaf
-        MYSQL_USER: rawaf
-        MYSQL_PASSWORD: rawaf
-    networks:
-      back_tier:
-    restart: always
   phpmyadmin:
     image: phpmyadmin/phpmyadmin
-    container_name: phpmyadmin-project-realestate-eg
+    container_name: phpmyadmin
     volumes:
-      - /Dockerized-Environment-Boilerplate/Volume/Project-Realestate-Eg/phpmyadmin
+      - /Dockerized-Environment-Boilerplate/Volume/phpmyadmin
     environment:
       VIRTUAL_HOST: phpmyadmin.project-realestate-eg.com
-      PMA_HOST: mariadb-project-realestate-eg
+      PMA_DB_ENGINE: mariadb
+      PMA_HOST: mariadb
       PMA_PORT: 3306
-      PMA_ABSOLUTE_URI: https://phpmyadmin.project-realestate-eg.com/
+      PMA_ABSOLUTE_URI: https://phpmyadmin.project-realestate-eg.com
     ports:
       - 4002:4002
     links:

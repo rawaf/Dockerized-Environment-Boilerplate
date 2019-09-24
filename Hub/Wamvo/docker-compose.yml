@@ -35,32 +35,19 @@ services:
       - php-fpm
     working_dir: /var/www/html
     restart: always
-  mariadb:
-    image: mariadb
-    container_name: mariadb-wamvo
-    volumes:
-      - /Dockerized-Environment-Boilerplate/Volume/Wamvo/mariadb:/var/lib/mysql
-    ports:
-      - 3306:3306
-    environment:
-      MYSQL_ROOT_PASSWORD: rawaf
-      MYSQL_USER: rawaf
-      MYSQL_PASSWORD: rawaf
-    networks:
-      back_tier:
-    restart: always
   phpmyadmin:
     image: phpmyadmin/phpmyadmin
-    container_name: phpmyadmin-wamvo
+    container_name: phpmyadmin
     volumes:
-      - /Dockerized-Environment-Boilerplate/Volume/Wamvo/phpmyadmin
+      - /Dockerized-Environment-Boilerplate/Volume/phpmyadmin
     environment:
       VIRTUAL_HOST: phpmyadmin.wamvo.com
-      PMA_HOST: mariadb-wamvo
+      PMA_DB_ENGINE: mariadb
+      PMA_HOST: mariadb
       PMA_PORT: 3306
-      PMA_ABSOLUTE_URI: https://phpmyadmin.wamvo.com/
+      PMA_ABSOLUTE_URI: https://phpmyadmin.wamvo.com
     ports:
-      - 4004:4004
+      - 4001:4001
     links:
       - mariadb
     networks:
