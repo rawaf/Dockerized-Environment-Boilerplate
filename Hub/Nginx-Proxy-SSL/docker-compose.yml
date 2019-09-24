@@ -23,10 +23,6 @@ services:
       - back_tier
       - front_tier
     restart: always
-    environment:
-      VIRTUAL_PROTO: https
-      VIRTUAL_PORT: 443
-      CERT_NAME: ssl_cert
     labels:
       - com.github.jrcs.letsencrypt_nginx_proxy_companion.nginx_proxy
   letsencrypt:
