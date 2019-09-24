@@ -49,6 +49,9 @@ services:
       - /Dockerized-Environment-Boilerplate/Volume/Project-Realestate-Eg/phpmyadmin/phpmyadmin:/etc/phpmyadmin
     networks:
       back_tier:
+    expose:
+      - 80
+      - 443
     ports:
       - 8003:80
     environment:
@@ -56,6 +59,7 @@ services:
       VIRTUAL_PORT: 8003
       PMA_DB_ENGINE: mariadb
       PMA_HOST: mariadb
+      PMA_ABSOLUTE_URI: https://phpmyadmin.project-realestate-eg.com/
     links:
       - php-fpm
     external_links:

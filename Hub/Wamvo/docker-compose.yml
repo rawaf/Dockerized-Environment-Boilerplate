@@ -51,11 +51,15 @@ services:
       back_tier:
     ports:
       - 8002:80
+    expose:
+      - 80
+      - 443
     environment:
       VIRTUAL_HOST: phpmyadmin.wamvo.com
       VIRTUAL_PORT: 8002
       PMA_DB_ENGINE: mariadb
       PMA_HOST: mariadb
+      PMA_ABSOLUTE_URI: https://phpmyadmin.wamvo.com/
     links:
       - php-fpm
     external_links:
