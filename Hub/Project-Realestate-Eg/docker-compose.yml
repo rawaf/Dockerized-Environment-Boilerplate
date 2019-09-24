@@ -22,15 +22,21 @@ services:
       - /Dockerized-Environment-Boilerplate/Volume/Project-Realestate-Eg/conf.d:/etc/nginx/conf.d
       - /Dockerized-Environment-Boilerplate/Volume/Project-Realestate-Eg/www:/var/www/html
       - /Dockerized-Environment-Boilerplate/Volume/Project-Realestate-Eg/log/nginx:/var/log/nginx
+    ports:
+      - 80
+      - 443
     expose:
       - 80
     networks:
       back_tier:
       front_tier:
     environment:
-        VIRTUAL_HOST: project-realestate-eg.com,www.project-realestate-eg.com,mail.project-realestate-eg.com,phpmyadmin.project-realestate-eg.com
-        LETSENCRYPT_HOST: project-realestate-eg.com,www.project-realestate-eg.com,mail.project-realestate-eg.com,phpmyadmin.project-realestate-eg.com
-        LETSENCRYPT_EMAIL: contact@project-realestate-eg.com
+      VIRTUAL_PROTO: https
+      VIRTUAL_PORT: 443
+      CERT_NAME: default
+      VIRTUAL_HOST: project-realestate-eg.com
+      LETSENCRYPT_HOST: project-realestate-eg.com
+      LETSENCRYPT_EMAIL: contact@project-realestate-eg.com
     links:
       - php-fpm
     working_dir: /var/www/html
@@ -45,7 +51,7 @@ services:
       PMA_DB_ENGINE: mariadb
       PMA_HOST: mariadb
       PMA_PORT: 3306
-      PMA_ABSOLUTE_URI: https://phpmyadmin.project-realestate-eg.com
+      PMA_ABSOLUTE_URI: phpmyadmin.project-realestate-eg.com
     ports:
       - 4002:4002
     external_links:

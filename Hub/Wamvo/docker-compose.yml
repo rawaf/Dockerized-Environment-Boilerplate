@@ -22,14 +22,20 @@ services:
       - /Dockerized-Environment-Boilerplate/Volume/Wamvo/conf.d:/etc/nginx/conf.d
       - /Dockerized-Environment-Boilerplate/Volume/Wamvo/www:/var/www/html
       - /Dockerized-Environment-Boilerplate/Volume/Wamvo/log/nginx:/var/log/nginx
+    ports:
+      - 80
+      - 443
     expose:
       - 80
     networks:
       back_tier:
       front_tier:
     environment:
-      VIRTUAL_HOST: wamvo.com,www.wamvo.com,mail.wamvo.com,phpmyadmin.wamvo.com
-      LETSENCRYPT_HOST: wamvo.com,www.wamvo.com,mail.wamvo.com,phpmyadmin.wamvo.com
+      VIRTUAL_PROTO: https
+      VIRTUAL_PORT: 443
+      CERT_NAME: default
+      VIRTUAL_HOST: wamvo.com
+      LETSENCRYPT_HOST: wamvo.com
       LETSENCRYPT_EMAIL: contact@wamvo.com
     links:
       - php-fpm
