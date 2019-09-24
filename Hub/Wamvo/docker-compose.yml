@@ -48,7 +48,7 @@ services:
       PMA_ABSOLUTE_URI: https://phpmyadmin.wamvo.com
     ports:
       - 4001:4001
-    links:
+    external_links:
       - mariadb
     networks:
       back_tier:

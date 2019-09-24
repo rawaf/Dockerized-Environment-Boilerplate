@@ -48,7 +48,7 @@ services:
       PMA_ABSOLUTE_URI: https://phpmyadmin.project-realestate-eg.com
     ports:
       - 4002:4002
-    links:
+    external_links:
       - mariadb
     networks:
       back_tier:
