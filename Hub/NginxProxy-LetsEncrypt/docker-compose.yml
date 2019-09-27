@@ -1,0 +1,54 @@
+version: "3.7"
+networks:
+  ${BACKEND_NETWORK}:
+    name: ${BACKEND_NETWORK_NAME}
+    driver: bridge
+  ${FRONTEND_NETWORK}:
+    name: ${FRONTEND_NETWORK_NAME}
+    driver: bridge
+services:
+  ${NGINX_PROXY_SERVICE_NAME}:
+    image: jwilder/nginx-proxy
+    container_name: ${NGINX_PROXY_CONTAINER_NAME}
+    networks:
+      - ${BACKEND_NETWORK_NAME}
+      - ${FRONTEND_NETWORK_NAME}
+    ports:
+      - 80:80
+      - 443:443
+    volumes:
+      - ../../Volume/${NGINX_PROXY_LETS_ENCRYPT_DIR}/conf.d:/etc/nginx/conf.d
+      - ../../Volume/${NGINX_PROXY_LETS_ENCRYPT_DIR}/vhost.d:/etc/nginx/vhost.d
+      - ../../Volume/${NGINX_PROXY_LETS_ENCRYPT_DIR}/html:/usr/share/nginx/html
+      - ../../Volume/${NGINX_PROXY_LETS_ENCRYPT_DIR}/certs:/etc/nginx/certs:ro
+      - /var/run/docker.sock:/tmp/docker.sock:ro
+    restart: always
+    labels:
+      - com.github.jrcs.letsencrypt_nginx_proxy_companion.nginx_proxy
+  ${LETS_ENCRYPT_SERVICE_NAME}:
+    image: jrcs/letsencrypt-nginx-proxy-companion
+    container_name: ${LETS_ENCRYPT_CONTAINER_NAME}
+    depends_on:
+      - {NGINX_PROXY_SERVICE_NAME}
+    networks:
+      - ${BACKEND_NETWORK_NAME}
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+      - /var/run/docker.sock:/tmp/docker.sock:ro
+      - ../../Volume/${NGINX_PROXY_LETS_ENCRYPT_DIR}/certs:/etc/nginx/certs:rw
+      - ../../Volume/${NGINX_PROXY_LETS_ENCRYPT_DIR}/conf.d:/etc/nginx/conf.d
+      - ../../Volume/${NGINX_PROXY_LETS_ENCRYPT_DIR}/vhost.d:/etc/nginx/vhost.d
+      - ../../Volume/${NGINX_PROXY_LETS_ENCRYPT_DIR}/html:/usr/share/nginx/html
+    restart: always
+  ${MYSQL_SERVICE_NAME}:
+    image: mysql
+    container_name: ${MYSQL_CONTAINER_NAME}
+    networks:
+      ${BACKEND_NETWORK_NAME}:
+    ports:
+      - ${MYSQL_HOST_PORT}:${MYSQL_CONTAINER_PORT}
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+    volumes:
+      - ../../Volume/${MYSQL_DIR}:/var/lib/mysql
+    restart: always
