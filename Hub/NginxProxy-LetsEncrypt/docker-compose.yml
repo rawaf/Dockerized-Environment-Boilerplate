@@ -1,18 +1,18 @@
 version: "3.7"
 networks:
-  ${BACKEND_NETWORK}:
-    name: ${BACKEND_NETWORK_NAME}
+  backend_tier:
+    name: backend_tier
     driver: bridge
-  ${FRONTEND_NETWORK}:
-    name: ${FRONTEND_NETWORK_NAME}
+  frontend_tier:
+    name: frontend_tier
     driver: bridge
 services:
   nginx-proxy:
     image: jwilder/nginx-proxy
     container_name: ${NGINX_PROXY_CONTAINER_NAME}
     networks:
-      - ${BACKEND_NETWORK_NAME}
-      - ${FRONTEND_NETWORK_NAME}
+      - backend_tier
+      - frontend_tier
     ports:
       - 80:80
       - 443:443
@@ -31,7 +31,7 @@ services:
     depends_on:
       - nginx-proxy
     networks:
-      - ${BACKEND_NETWORK_NAME}
+      - backend_tier
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock:ro
       - /var/run/docker.sock:/tmp/docker.sock:ro
@@ -44,7 +44,7 @@ services:
     image: mysql
     container_name: ${MYSQL_CONTAINER_NAME}
     networks:
-      ${BACKEND_NETWORK_NAME}:
+      backend_tier:
     ports:
       - ${MYSQL_HOST_PORT}:${MYSQL_CONTAINER_PORT}
     environment:
