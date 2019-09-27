@@ -7,7 +7,7 @@ networks:
     name: ${FRONTEND_NETWORK_NAME}
     driver: bridge
 services:
-  ${NGINX_PROXY_SERVICE_NAME}:
+  nginx-proxy:
     image: jwilder/nginx-proxy
     container_name: ${NGINX_PROXY_CONTAINER_NAME}
     networks:
@@ -25,11 +25,11 @@ services:
     restart: always
     labels:
       - com.github.jrcs.letsencrypt_nginx_proxy_companion.nginx_proxy
-  ${LETS_ENCRYPT_SERVICE_NAME}:
+  letsEncrypt:
     image: jrcs/letsencrypt-nginx-proxy-companion
     container_name: ${LETS_ENCRYPT_CONTAINER_NAME}
     depends_on:
-      - {NGINX_PROXY_SERVICE_NAME}
+      - nginx-proxy
     networks:
       - ${BACKEND_NETWORK_NAME}
     volumes:
@@ -40,7 +40,7 @@ services:
       - ../../Volume/${NGINX_PROXY_LETS_ENCRYPT_DIR}/vhost.d:/etc/nginx/vhost.d
       - ../../Volume/${NGINX_PROXY_LETS_ENCRYPT_DIR}/html:/usr/share/nginx/html
     restart: always
-  ${MYSQL_SERVICE_NAME}:
+  mysql:
     image: mysql
     container_name: ${MYSQL_CONTAINER_NAME}
     networks:
