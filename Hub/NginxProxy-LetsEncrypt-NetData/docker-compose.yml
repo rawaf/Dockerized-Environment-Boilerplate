@@ -52,3 +52,23 @@ services:
     volumes:
       - ../../Volume/${MYSQL_DIR}:/var/lib/mysql
     restart: always
+  netdata:
+    image: netdata/netdata
+    container_name: ${NETDATA_CONTAINER_NAME}
+    networks:
+      frontend_tier:
+    ports:
+      - ${NETDATA_HOST_PORT}:${NETDATA_CONTAINER_PORT}
+    depends_on:
+      - nginx-proxy
+    cap_add:
+      - SYS_PTRACE
+    security_opt:
+      - apparmor:unconfined
+    environment:
+      PGID: ${DOCKER_GROUP_ID}
+    volumes:
+      - /proc:/host/proc:ro
+      - /sys:/host/sys:ro
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+    restart: always

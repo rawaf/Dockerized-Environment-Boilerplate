@@ -32,8 +32,9 @@ services:
       frontend_tier:
     environment:
       VIRTUAL_PORT: 443
+      VIRTUAL_PROTO: https
       CERT_NAME: ${APP_DOMAIN}
       VIRTUAL_HOST: ${APP_DOMAIN},www.${APP_DOMAIN}
-      LETSENCRYPT_HOST: ${APP_DOMAIN}
+      LETSENCRYPT_HOST: ${APP_DOMAIN},www.${APP_DOMAIN}
       LETSENCRYPT_EMAIL: ${LETSENCRYPT_EMAIL}
     restart: always
