@@ -14,7 +14,9 @@ services:
     external_links:
       - ${DATABASE_CONTAINER_NAME}
     volumes:
-      - ../../Volume/${APP_NAME}/www:/var/www/html
+      - ../../Volume/${APP_NAME}/www:/var/www/html:rw
+      - ../../Volume/${APP_NAME}/php/conf.d:/usr/local/etc/php/conf.d
+      - ../../Volume/${APP_NAME}/php/php.ini-development:/usr/local/etc/php/php.ini
   nginx:
     image: nginx
     container_name: ${NGINX_CONTAINER_NAME}
@@ -22,7 +24,7 @@ services:
       - php-fpm
     volumes:
       - ../../Volume/${APP_NAME}/conf.d:/etc/nginx/conf.d
-      - ../../Volume/${APP_NAME}/www:/var/www/html
+      - ../../Volume/${APP_NAME}/www:/var/www/html:rw
       - ../../Volume/${APP_NAME}/log/nginx:/var/log/nginx
     expose:
       - 80
