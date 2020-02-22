@@ -1,0 +1,40 @@
+version: '3.7'
+networks:
+  backend_tier:
+    external: true
+  frontend_tier:
+    external: true
+services:
+  nginx:
+    image: nginx
+    container_name: ${NGINX_CONTAINER_NAME}
+    volumes:
+      - ../../Volume/${APP_NAME}/conf.d:/etc/nginx/conf.d
+      - ../../Volume/${APP_NAME}/www:/var/www/html:rw
+      - ../../Volume/${APP_NAME}/log/nginx:/var/log/nginx
+    expose:
+      - 80
+      - 443
+    networks:
+      backend_tier:
+      frontend_tier:
+    environment:
+      VIRTUAL_PORT: 443
+      VIRTUAL_HOST: ${APP_DOMAIN},www.${APP_DOMAIN}
+      LETSENCRYPT_HOST: ${APP_DOMAIN},www.${APP_DOMAIN}
+      LETSENCRYPT_EMAIL: ${LETSENCRYPT_EMAIL}
+    restart: always
+  odoo:
+    image: odoo:12.0
+    container_name: ${NGINX_CONTAINER_NAME}
+    ports:
+      - "8069:8069"
+    networks:
+      backend_tier:
+      frontend_tier:
+    external_links:
+      - ${DATABASE_CONTAINER_NAME}
+    volumes:
+      - ../../Volume/${APP_NAME}/odoo-web-data:/var/lib/odoo
+      - ../../Volume/${APP_NAME}/config:/etc/odoo
+      - ../../Volume/${APP_NAME}/addons:/mnt/extra-addons
