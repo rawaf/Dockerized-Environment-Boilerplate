@@ -28,7 +28,7 @@ services:
     image: odoo:12.0
     container_name: ${NGINX_CONTAINER_NAME}
     ports:
-      - "8069:8069"
+      - ${ODOO_HOST_PORT}:${ODOO_CONTAINER_PORT}
     networks:
       backend_tier:
       frontend_tier:
