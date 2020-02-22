@@ -38,3 +38,6 @@ services:
       - ../../Volume/${APP_NAME}/odoo-web-data:/var/lib/odoo
       - ../../Volume/${APP_NAME}/config:/etc/odoo
       - ../../Volume/${APP_NAME}/addons:/mnt/extra-addons
+    environment:
+      - VIRTUAL_PORT=8069, 8072
+    restart: always
