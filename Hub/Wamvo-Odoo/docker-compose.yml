@@ -26,7 +26,7 @@ services:
     restart: always
   odoo:
     image: odoo:12.0
-    container_name: ${NGINX_CONTAINER_NAME}
+    container_name: ${Odoo_CONTAINER_NAME}
     ports:
       - ${ODOO_HOST_PORT}:${ODOO_CONTAINER_PORT}
     networks:
