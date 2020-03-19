@@ -1,0 +1,19 @@
+version: '3.7'
+networks:
+  backend_tier:
+    external: true
+  frontend_tier:
+    external: true
+services:
+  mysql:
+    image: mysql
+    container_name: ${MYSQL_CONTAINER_NAME}
+    networks:
+      backend_tier:
+    ports:
+      - ${MYSQL_HOST_PORT}:${MYSQL_CONTAINER_PORT}
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+    volumes:
+      - ../../Volume/${MYSQL_DIR}:/var/lib/mysql
+    restart: always

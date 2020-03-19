@@ -40,32 +40,6 @@ services:
       - ../../Volume/${NGINX_PROXY_LETS_ENCRYPT_DIR}/vhost.d:/etc/nginx/vhost.d
       - ../../Volume/${NGINX_PROXY_LETS_ENCRYPT_DIR}/html:/usr/share/nginx/html
     restart: always
-  mysql:
-    image: mysql
-    container_name: ${MYSQL_CONTAINER_NAME}
-    networks:
-      backend_tier:
-    ports:
-      - ${MYSQL_HOST_PORT}:${MYSQL_CONTAINER_PORT}
-    environment:
-      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
-    volumes:
-      - ../../Volume/${MYSQL_DIR}:/var/lib/mysql
-    restart: always
-  postgres:
-    image: postgres
-    container_name: ${POSTGRES_CONTAINER_NAME}
-    networks:
-      backend_tier:
-    ports:
-      - ${POSTGRES_HOST_PORT}:${POSTGRES_CONTAINER_PORT}
-    environment:
-      - POSTGRES_DB=${POSTGRES_DEFAULT_DB_NAME}
-      - POSTGRES_USER=${POSTGRES_USER}
-      - POSTGRES_PASSWORD=${POSTGRES_USER_PASSWORD}
-    volumes:
-      - ../../Volume/${POSTGRES_DIR}:/var/lib/postgresql
-    restart: always
   netdata:
     image: netdata/netdata
     container_name: ${NETDATA_CONTAINER_NAME}
